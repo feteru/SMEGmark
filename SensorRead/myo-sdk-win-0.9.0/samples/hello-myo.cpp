@@ -19,7 +19,7 @@
 class DataCollector : public myo::DeviceListener {
 public:
     DataCollector()
-    : onArm(false), isUnlocked(false), roll_w(0), pitch_w(0), yaw_w(0), currentPose()
+    : onArm(false), isUnlocked(false), roll_w(0), pitch_w(0), yaw_w(0), roll(0), yaw(0), pitch(0), gyrox(0), gyroy(0), gyroz(0), accelx(0), accely(0), accelz(0), currentPose()
     {
     }
 
@@ -31,6 +31,15 @@ public:
         roll_w = 0;
         pitch_w = 0;
         yaw_w = 0;
+		roll = 0;
+		pitch = 0;
+		yaw = 0;
+		gyrox = 0;
+		gyroy = 0;
+		gyroz = 0;
+		accelx = 0;
+		accely = 0;
+		accelz = 0;
         onArm = false;
         isUnlocked = false;
     }
@@ -111,6 +120,25 @@ public:
     // There are other virtual functions in DeviceListener that we could override here, like onAccelerometerData().
     // For this example, the functions overridden above are sufficient.
 
+	void onAccelerometerData(myo::Myo *myo, uint64_t timestamp, const myo::Vector3< float > &accel) {
+		//std::cout << "ACCELEROMETER DATA" << std::endl;
+		printAccelVector(accel);
+	}
+	void printAccelVector(const myo::Vector3< float > &vector) {
+		accelx = static_cast<float>(vector.x());
+		accely = static_cast<float>(vector.y());
+		accelz = static_cast<float>(vector.z());
+	}
+	void onGyroscopeData(myo::Myo *myo, uint64_t timestamp, const myo::Vector3< float > &gyro) {
+		//std::cout << "GYRO DATA" << std::endl;
+		printGyroVector(gyro);
+	}
+	void printGyroVector(const myo::Vector3< float > &vector) {
+		gyrox = static_cast<float>(vector.x());
+		gyroy = static_cast<float>(vector.y());
+		gyroz = static_cast<float>(vector.z());
+	}
+
     // We define this function to print the current values that were updated by the on...() functions above.
     void print()
     {
@@ -118,7 +146,7 @@ public:
         std::cout << '\r';
 
         // Print out the orientation. Orientation data is always available, even if no arm is currently recognized.
-		std::cout << "[Roll: " << roll << "\t Pitch: " << pitch << "\t Yaw: " << yaw << ']';
+		std::cout << "[Roll: " << roll_w << "\t Pitch: " << pitch_w << "\t Yaw: " << yaw_w << "]\t[" << accelx << ',\t' << accely << ',\t' << accelz << ']';
 		/*std::cout << '[' << std::string(roll_w, '*') << std::string(18 - roll_w, ' ') << ']'
                   << '[' << std::string(pitch_w, '*') << std::string(18 - pitch_w, ' ') << ']'
                   << '[' << std::string(yaw_w, '*') << std::string(18 - yaw_w, ' ') << ']';
@@ -145,14 +173,13 @@ public:
 		}
 		outFile.open("outFile.txt", std::ios::out);
 
-		outFile << roll_w << ',' << pitch_w << ',' << yaw_w << std::endl;
+		outFile << roll_w << ',' << pitch_w << ',' << yaw_w << '|' << accelx << ',' << accely << ',' << accelz << '|' << gyrox << ',' << gyroy << ',' << gyroz << std::endl;
 		outFile.close();
     }
 
 	// Helper to print out accelerometer and gyroscope vectors
-	void printVector(std::ofstream &file, uint64_t timestamp, const myo::Vector3< float > &vector) {
-		file << timestamp
-			<< ',' << vector.x()
+	void printVector(std::ofstream &file, const myo::Vector3< float > &vector) {
+		file << vector.x()
 			<< ',' << vector.y()
 			<< ',' << vector.z()
 			<< std::endl;
@@ -168,6 +195,8 @@ public:
     // These values are set by onOrientationData() and onPose() above.
     int roll_w, pitch_w, yaw_w;
 	float roll, pitch, yaw;
+	float accelx, accely, accelz;
+	float gyrox, gyroy, gyroz;
     myo::Pose currentPose;
 
 	std::ofstream outFile;
