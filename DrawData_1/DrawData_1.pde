@@ -6,8 +6,8 @@ String[] acclines;
 String[] orelines;
 
 //start the acceleration and the orientation vectors at the same point. 
-int[] curraccPoint = {width/2, height/2};
-int[] currorePoint = {width/2, height/2};
+int[] curraccPoint;
+int[] currorePoint;
 
 //initialize directions as 1. When it hits a wall this value will switch. 
 int accdirX = 1;
@@ -22,7 +22,7 @@ void draw(){
   acclines = loadStrings("../bigsickquick/accelerometer-1523080528.csv"); 
   orelines = loadStrings("../bigsickquick/orientationEuler-1523080528.csv");
   if(i > (acclines.length-2)){ delay(2000); exit(); }   
-
+  
   //current acceleration reading and plotting section
   String[] accdims = split(acclines[i], ",");
   
