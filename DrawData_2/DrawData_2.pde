@@ -41,6 +41,10 @@ int i = 1;  //increment for moving around.
 
 int beatDelay = 10; // TODO change the delay time so that it matches the beat of the music
 
+//start and stop for arc lengths
+float[] ends = {0,10};
+
+
 
 //****************************
 // SUPPORT FUNCTIONS
@@ -131,20 +135,21 @@ void draw() {
   currorePoint[0] = pointX; 
   currorePoint[1] = pointY;  //update the current orientation
   // println(str(currorePoint[0]) + ", " + str(currorePoint[1]));  // println for debugging:
-
+  
   // move points around page at more wide-spread rate to see flow better
   // "mod" handles running off the page (but loops around instead of bouncing back in dir from which it came)
-
+  
   int adaptedXpt = safeMod(3*pointX, 3*pointY)[0];
   int adaptedYpt = safeMod(3*pointX, 3*pointY)[1];
   
   //point(adaptedXpt, adaptedYpt); // make sure the point never overwrites the buffer with %width & %height (it essentially wraps around)
-
   
-//linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
-
-println(accdims);
-arcDraw.drawArc(accdims, oredims, 0);
+  
+  //linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
+  
+  println(accdims);
+  ends = arcDraw.drawArc(accdims, oredims, ends);
+  
   
   
   
