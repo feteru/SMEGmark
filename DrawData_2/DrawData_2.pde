@@ -1,7 +1,8 @@
 // hit "esc" key to quit draw at any time
 
 //TODO change buffer to random number OR some smallish movement from the last x,y coordinate
-ArcDraw arcDraw;
+ArcDraw arcDraw = new ArcDraw();
+
 void setup() {
   size(512, 512);
 }
@@ -139,19 +140,14 @@ void draw() {
   
   point(adaptedXpt, adaptedYpt); // make sure the point never overwrites the buffer with %width & %height (it essentially wraps around)
 
-  // every 2nd point, also include a line to spice things up
-  if (i%2 == 0) {
-    int x1 = adaptedXpt - (width/8);
-    int x2 = adaptedXpt + (width/8);
-    int y1 = adaptedYpt - (height/8);
-    int y2 = adaptedYpt + (height/8);
-    line(x1, y1, x2, y2);
-  }
+  
 //linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
 
-//println(accdims);
-//arcDraw.test(true);
-//arcDraw.drawArc(accdims, oredims, 0);
+println(accdims);
+arcDraw.drawArc(accdims, oredims, 0);
+  
+  
+  
   //handle running off the edge. I wish this were better. 
   // update: instead of bouncing back in dir from which the point came, code will loop (see mod "%")
   //if(curraccPoint[0]>512){accdirX = accdirX*-1;}
