@@ -21,6 +21,10 @@ public:
     DataCollector()
 		: onArm(false), isUnlocked(false), roll_w{ 0,0 }, pitch_w{ 0,0 }, yaw_w{ 0,0 }, roll{ 0,0 }, yaw{ 0,0 }, pitch{ 0,0 }, gyrox{ 0,0 }, gyroy{ 0,0 }, gyroz{ 0,0 }, accelx{ 0,0 }, accely{ 0,0 }, accelz{ 0,0 }, currentPose()
     {
+		if (logFile.is_open()) {
+			logFile.close();
+		}
+		logFile.open("logFile.csv", std::ios::out);
     }
 
 	void onPair(myo::Myo* myo, uint64_t timestamp, myo::FirmwareVersion firmwareVersion)
@@ -219,6 +223,9 @@ public:
 
 		outFile << roll_w[0] << ',' << pitch_w[0] << ',' << yaw_w[0] << '|' << accelx[0] << ',' << accely[0] << ',' << accelz[0] << '|' << gyrox[0] << ',' << gyroy[0] << ',' << gyroz[0] << ';' << roll_w[1] << ',' << pitch_w[1] << ',' << yaw_w[1] << '|' << accelx[1] << ',' << accely[1] << ',' << accelz[1] << '|' << gyrox[1] << ',' << gyroy[1] << ',' << gyroz[1] << std::endl;
 		outFile.close();
+
+		logFile << roll_w[0] << ',' << pitch_w[0] << ',' << yaw_w[0] << ',' << accelx[0] << ',' << accely[0] << ',' << accelz[0] << ',' << gyrox[0] << ',' << gyroy[0] << ',' << gyroz[0] << ',' << roll_w[1] << ',' << pitch_w[1] << ',' << yaw_w[1] << ',' << accelx[1] << ',' << accely[1] << ',' << accelz[1] << ',' << gyrox[1] << ',' << gyroy[1] << ',' << gyroz[1] << std::endl;
+
     }
 
     // These values are set by onArmSync() and onArmUnsync() above.
@@ -236,6 +243,7 @@ public:
     myo::Pose currentPose;
 
 	std::ofstream outFile;
+	std::ofstream logFile;
 	std::vector<myo::Myo*> knownMyos;
 };
 
