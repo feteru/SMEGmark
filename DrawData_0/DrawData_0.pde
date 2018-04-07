@@ -17,23 +17,28 @@ int oredirY = 1;
 int i = 0;  //increment for moving around. 
 
 void draw(){
+  
   //read strings from .csv files. This will be only one file in the future. 
   acclines = loadStrings("../bigsickquick/accelerometer-1523080528.csv"); 
   orelines = loadStrings("../bigsickquick/orientationEuler-1523080528.csv");
-  
+  if(i > (acclines.length-2)){ delay(2000); exit(); }   
+
   //current acceleration reading and plotting section
   String[] accdims = split(acclines[i], ",");
-  int pointX = int(curraccPoint[0] + int(accdims[1])*-accdirX);
-  int pointY = int(curraccPoint[1] + int(accdims[2])*-accdirY);
-  curraccPoint[0] = pointX;
-  curraccPoint[1] = pointY;
+  //int pointX = int(curraccPoint[0] + int(accdims[1])*-accdirX);
+  //int pointY = int(curraccPoint[1] + int(accdims[2])*-accdirY);
+  //curraccPoint[0] = pointX;
+  //curraccPoint[1] = pointY;
   //println(curraccPoint);
   //point(pointX,pointY)
   
   //int[] newpoint = pointPlot(orelines[i],curraccPoint));
   String[] oredims = split(orelines[i], ",");
-  pointX = int(currorePoint[0] + int(oredims[1])*-oredirX);  //create new point based off of old
-  pointY = int(currorePoint[1] + int(oredims[2])*-oredirY);
+  int pointX = int(currorePoint[0] + int(oredims[1])*-oredirX + int(accdims[1])*-accdirX);  //create new point based off of old
+  int pointY = int(currorePoint[1] + int(oredims[2])*-oredirY + int(accdims[2])*-accdirY);
+  if((pointX == currorePoint[0])&&(pointY==currorePoint[1])){
+    //if they're the same does it matter?    
+  }
   currorePoint[0] = pointX; currorePoint[1] = pointY;  //update the current orientation
   println(str(currorePoint[0]) + ", " + str(currorePoint[1]));
   point(pointX,pointY);
@@ -48,7 +53,6 @@ void draw(){
   else if ((currorePoint[1]>512)||(currorePoint[1]<0)){ oredirY = oredirY*-1;}
   
   
-  if(i > acclines.length){ exit(); }   
 }
 
 
