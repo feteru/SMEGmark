@@ -138,7 +138,7 @@ void draw() {
   int adaptedXpt = safeMod(3*pointX, 3*pointY)[0];
   int adaptedYpt = safeMod(3*pointX, 3*pointY)[1];
   
-  point(adaptedXpt, adaptedYpt); // make sure the point never overwrites the buffer with %width & %height (it essentially wraps around)
+  //point(adaptedXpt, adaptedYpt); // make sure the point never overwrites the buffer with %width & %height (it essentially wraps around)
 
   
 //linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
