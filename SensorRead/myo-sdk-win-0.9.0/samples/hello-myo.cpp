@@ -19,34 +19,49 @@
 class DataCollector : public myo::DeviceListener {
 public:
     DataCollector()
-    : onArm(false), isUnlocked(false), roll_w(0), pitch_w(0), yaw_w(0), roll(0), yaw(0), pitch(0), gyrox(0), gyroy(0), gyroz(0), accelx(0), accely(0), accelz(0), currentPose()
+		: onArm(false), isUnlocked(false), roll_w{ 0,0 }, pitch_w{ 0,0 }, yaw_w{ 0,0 }, roll{ 0,0 }, yaw{ 0,0 }, pitch{ 0,0 }, gyrox{ 0,0 }, gyroy{ 0,0 }, gyroz{ 0,0 }, accelx{ 0,0 }, accely{ 0,0 }, accelz{ 0,0 }, currentPose()
     {
     }
+
+	void onPair(myo::Myo* myo, uint64_t timestamp, myo::FirmwareVersion firmwareVersion)
+	{
+		// Print out the MAC address of the armband we paired with.
+
+		// The pointer address we get for a Myo is unique - in other words, it's safe to compare two Myo pointers to
+		// see if they're referring to the same Myo.
+
+		// Add the Myo pointer to our list of known Myo devices. This list is used to implement identifyMyo() below so
+		// that we can give each Myo a nice short identifier.
+		knownMyos.push_back(myo);
+
+		// Now that we've added it to our list, get our short ID for it and print it out.
+		std::cout << "Paired with " << identifyMyo(myo) << "." << std::endl;
+	}
 
     // onUnpair() is called whenever the Myo is disconnected from Myo Connect by the user.
     void onUnpair(myo::Myo* myo, uint64_t timestamp)
     {
         // We've lost a Myo.
         // Let's clean up some leftover state.
-        roll_w = 0;
-        pitch_w = 0;
-        yaw_w = 0;
-		roll = 0;
-		pitch = 0;
-		yaw = 0;
-		gyrox = 0;
-		gyroy = 0;
-		gyroz = 0;
-		accelx = 0;
-		accely = 0;
-		accelz = 0;
+		roll_w[0] = 0; roll_w[1] = 0;
+        pitch_w[0] = 0; pitch_w[1] = 0;
+        yaw_w[0] = 0; yaw_w[1] = 0;
+		roll[0] = 0; roll[1] = 0;
+		pitch[0] = 0; pitch[1] = 0;
+		yaw[0] = 0; yaw[1] = 0;
+		gyrox[0] = 0; gyrox[1] = 0;
+		gyroy[0] = 0; gyroy[1] = 0;
+		gyroz[0] = 0; gyroz[1] = 0;
+		accelx[0] = 0; accelx[1] = 0;
+		accely[0] = 0; accely[1] = 0;
+		accelz[0] = 0; accelz[1] = 0;
         onArm = false;
         isUnlocked = false;
     }
 
     // onOrientationData() is called whenever the Myo device provides its current orientation, which is represented
     // as a unit quaternion.
-    void onOrientationData(myo::Myo* myo, uint64_t timestamp, const myo::Quaternion<float>& quat)
+    void onOrientationData(myo::Myo* myo, uint64_t timestamp, const myo::Quaternion< float > &quat)
     {
         using std::atan2;
         using std::asin;
@@ -54,22 +69,31 @@ public:
         using std::max;
         using std::min;
 
+		int which = (int)(identifyMyo(myo)-1); 
+
         // Calculate Euler angles (roll, pitch, and yaw) from the unit quaternion.
-        roll = static_cast<float> (atan2(2.0f * (quat.w() * quat.x() + quat.y() * quat.z()),
+        /*roll[which] = static_cast<float> (atan2(2.0f * (quat.w() * quat.x() + quat.y() * quat.z()),
                            1.0f - 2.0f * (quat.x() * quat.x() + quat.y() * quat.y())));
-        pitch = static_cast<float> (asin(max(-1.0f, min(1.0f, 2.0f * (quat.w() * quat.y() - quat.z() * quat.x())))));
-        yaw = static_cast<float> (atan2(2.0f * (quat.w() * quat.z() + quat.x() * quat.y()),
+        pitch[which] = static_cast<float> (asin(max(-1.0f, min(1.0f, 2.0f * (quat.w() * quat.y() - quat.z() * quat.x())))));
+        yaw[which] = static_cast<float> (atan2(2.0f * (quat.w() * quat.z() + quat.x() * quat.y()),
                         1.0f - 2.0f * (quat.y() * quat.y() + quat.z() * quat.z())));
 
         // Convert the floating point angles in radians to a scale from 0 to 18.
-        roll_w = static_cast<int>((roll + (float)M_PI)/(M_PI * 2.0f) * 18);
-        pitch_w = static_cast<int>((pitch + (float)M_PI/2.0f)/M_PI * 18);
-        yaw_w = static_cast<int>((yaw + (float)M_PI)/(M_PI * 2.0f) * 18);
+        roll_w[which] = static_cast<int>((roll[which] + (float)M_PI)/(M_PI * 2.0f) * 18);
+        pitch_w[which] = static_cast<int>((pitch[which] + (float)M_PI/2.0f)/M_PI * 18);
+        yaw_w[which] = static_cast<int>((yaw[which] + (float)M_PI)/(M_PI * 2.0f) * 18);*/
+
+		roll_w[which] = static_cast<int>(((atan2(2.0f * (quat.w() * quat.x() + quat.y() * quat.z()),
+			1.0f - 2.0f * (quat.x() * quat.x() + quat.y() * quat.y()))) + (float)M_PI) / (M_PI * 2.0f) * 18);
+		pitch_w[which] = static_cast<int>(((asin(max(-1.0f, min(1.0f, 2.0f * (quat.w() * quat.y() - quat.z() * quat.x()))))) + (float)M_PI / 2.0f) / M_PI * 18);
+		yaw_w[which] = static_cast<int>(((atan2(2.0f * (quat.w() * quat.z() + quat.x() * quat.y()),
+			1.0f - 2.0f * (quat.y() * quat.y() + quat.z() * quat.z()))) + (float)M_PI) / (M_PI * 2.0f) * 18);
+		//std::cout << "0:" << yaw_w[0] << "\t\t\t1:" << yaw_w[1] << std::endl;
     }
 
     // onPose() is called whenever the Myo detects that the person wearing it has changed their pose, for example,
     // making a fist, or not making a fist anymore.
-    void onPose(myo::Myo* myo, uint64_t timestamp, myo::Pose pose)
+    /*void onPose(myo::Myo* myo, uint64_t timestamp, myo::Pose pose)
     {
         currentPose = pose;
 
@@ -86,7 +110,7 @@ public:
             // are being performed, but lock after inactivity.
             myo->unlock(myo::Myo::unlockTimed);
         }
-    }
+    }*/
 
     // onArmSync() is called whenever Myo has recognized a Sync Gesture after someone has put it on their
     // arm. This lets Myo know which arm it's on and which way it's facing.
@@ -105,7 +129,7 @@ public:
         onArm = false;
     }
 
-    // onUnlock() is called whenever Myo has become unlocked, and will start delivering pose events.
+    // onUnlock() is called whenever Myo h  as become unlocked, and will start delivering pose events.
     void onUnlock(myo::Myo* myo, uint64_t timestamp)
     {
         isUnlocked = true;
@@ -117,26 +141,46 @@ public:
         isUnlocked = false;
     }
 
+	void onConnect(myo::Myo* myo, uint64_t timestamp, myo::FirmwareVersion firmwareVersion)
+	{
+		std::cout << "Myo " << identifyMyo(myo) << " has connected." << std::endl;
+	}
+
+	void onDisconnect(myo::Myo* myo, uint64_t timestamp)
+	{
+		std::cout << "Myo " << identifyMyo(myo) << " has disconnected." << std::endl;
+	}
+
     // There are other virtual functions in DeviceListener that we could override here, like onAccelerometerData().
     // For this example, the functions overridden above are sufficient.
 
 	void onAccelerometerData(myo::Myo *myo, uint64_t timestamp, const myo::Vector3< float > &accel) {
 		//std::cout << "ACCELEROMETER DATA" << std::endl;
-		printAccelVector(accel);
-	}
-	void printAccelVector(const myo::Vector3< float > &vector) {
-		accelx = static_cast<float>(vector.x());
-		accely = static_cast<float>(vector.y());
-		accelz = static_cast<float>(vector.z());
+		int which = (int)(identifyMyo(myo) - 1);
+
+		accelx[which] = static_cast<float>(accel.x());
+		accely[which] = static_cast<float>(accel.y());
+		accelz[which] = static_cast<float>(accel.z());
 	}
 	void onGyroscopeData(myo::Myo *myo, uint64_t timestamp, const myo::Vector3< float > &gyro) {
 		//std::cout << "GYRO DATA" << std::endl;
-		printGyroVector(gyro);
+		int which = (int)(identifyMyo(myo) - 1);
+
+		gyrox[which] = static_cast<float>(gyro.x());
+		gyroy[which] = static_cast<float>(gyro.y());
+		gyroz[which] = static_cast<float>(gyro.z());
 	}
-	void printGyroVector(const myo::Vector3< float > &vector) {
-		gyrox = static_cast<float>(vector.x());
-		gyroy = static_cast<float>(vector.y());
-		gyroz = static_cast<float>(vector.z());
+
+	size_t identifyMyo(myo::Myo* myo) {
+		// Walk through the list of Myo devices that we've seen pairing events for.
+		for (size_t i = 0; i < knownMyos.size(); ++i) {
+			// If two Myo pointers compare equal, they refer to the same Myo device.
+			if (knownMyos[i] == myo) {
+				return i + 1;
+			}
+		}
+
+		return 0;
 	}
 
     // We define this function to print the current values that were updated by the on...() functions above.
@@ -146,7 +190,7 @@ public:
         std::cout << '\r';
 
         // Print out the orientation. Orientation data is always available, even if no arm is currently recognized.
-		std::cout << "[Roll: " << roll_w << "\t Pitch: " << pitch_w << "\t Yaw: " << yaw_w << "]\t[" << accelx << ',\t' << accely << ',\t' << accelz << ']';
+		std::cout << "[RollL: " << roll_w[0] << "\tPitchL: " << pitch_w[0] << "\tYawL: " << yaw_w[0] << "] [RollR: "<< roll_w[1] << ",\tPitchR: " << pitch_w[1] << ",\tYawR: " << yaw_w[1] << ']';
 		/*std::cout << '[' << std::string(roll_w, '*') << std::string(18 - roll_w, ' ') << ']'
                   << '[' << std::string(pitch_w, '*') << std::string(18 - pitch_w, ' ') << ']'
                   << '[' << std::string(yaw_w, '*') << std::string(18 - yaw_w, ' ') << ']';
@@ -173,17 +217,9 @@ public:
 		}
 		outFile.open("outFile.txt", std::ios::out);
 
-		outFile << roll_w << ',' << pitch_w << ',' << yaw_w << '|' << accelx << ',' << accely << ',' << accelz << '|' << gyrox << ',' << gyroy << ',' << gyroz << std::endl;
+		outFile << roll_w[0] << ',' << pitch_w[0] << ',' << yaw_w[0] << '|' << accelx[0] << ',' << accely[0] << ',' << accelz[0] << '|' << gyrox[0] << ',' << gyroy[0] << ',' << gyroz[0] << ';' << roll_w[1] << ',' << pitch_w[1] << ',' << yaw_w[1] << '|' << accelx[1] << ',' << accely[1] << ',' << accelz[1] << '|' << gyrox[1] << ',' << gyroy[1] << ',' << gyroz[1] << std::endl;
 		outFile.close();
     }
-
-	// Helper to print out accelerometer and gyroscope vectors
-	void printVector(std::ofstream &file, const myo::Vector3< float > &vector) {
-		file << vector.x()
-			<< ',' << vector.y()
-			<< ',' << vector.z()
-			<< std::endl;
-	}
 
     // These values are set by onArmSync() and onArmUnsync() above.
     bool onArm;
@@ -193,13 +229,14 @@ public:
     bool isUnlocked;
 
     // These values are set by onOrientationData() and onPose() above.
-    int roll_w, pitch_w, yaw_w;
-	float roll, pitch, yaw;
-	float accelx, accely, accelz;
-	float gyrox, gyroy, gyroz;
+    int roll_w[2], pitch_w[2], yaw_w[2];
+	float roll[2], pitch[2], yaw[2];
+	float accelx[2], accely[2], accelz[2];
+	float gyrox[2], gyroy[2], gyroz[2];
     myo::Pose currentPose;
 
 	std::ofstream outFile;
+	std::vector<myo::Myo*> knownMyos;
 };
 
 int main(int argc, char** argv)
