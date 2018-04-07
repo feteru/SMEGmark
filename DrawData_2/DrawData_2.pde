@@ -133,8 +133,10 @@ void draw() {
 
   // move points around page at more wide-spread rate to see flow better
   // "mod" handles running off the page (but loops around instead of bouncing back in dir from which it came)
-  int adaptedXpt = ((pointX*3) % width);
-  int adaptedYpt = ((pointY*3) % height);
+
+  int adaptedXpt = safeMod(3*pointX, 3*pointY)[0];
+  int adaptedYpt = safeMod(3*pointX, 3*pointY)[1];
+  
   point(adaptedXpt, adaptedYpt); // make sure the point never overwrites the buffer with %width & %height (it essentially wraps around)
 
   // every 2nd point, also include a line to spice things up
@@ -143,12 +145,16 @@ void draw() {
     int x2 = adaptedXpt + (width/8);
     int y1 = adaptedYpt - (height/8);
     int y2 = adaptedYpt + (height/8);
-    //line(x1, y1, x2, y2);
+    line(x1, y1, x2, y2);
   }
 //linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
+<<<<<<< HEAD
 //println(accdims);
 //arcDraw.test(true);
 //arcDraw.drawArc(accdims, oredims, 0);
+=======
+
+>>>>>>> ee833c2e2dd1c9107125a70c3e87ed0fc2fb06f6
   //handle running off the edge. I wish this were better. 
   // update: instead of bouncing back in dir from which the point came, code will loop (see mod "%")
   //if(curraccPoint[0]>512){accdirX = accdirX*-1;}
@@ -159,7 +165,7 @@ void draw() {
 if (!readFromExcel) { // if not reading from excel, it's reading from a .txt so we open/close file in each loop
   try {
     reader.close();
-  } 
+  }
   catch (Exception e ) {
     System.out.println("HELP exception thrown trying to close input file");
   }

@@ -49,7 +49,7 @@ public:
     }
 
     // This is a utility function implemented for this sample that maps a myo::Myo* to a unique ID starting at 1.
-    // It does so by looking for the Myo pointer in knownMyos, which onPair() adds each Myo into as it is paired.
+    // It does so by looking for the Myo pointer in knownMyos, which onPair() adds each Myo into as it is paired. //TODO
     size_t identifyMyo(myo::Myo* myo) {
         // Walk through the list of Myo devices that we've seen pairing events for.
         for (size_t i = 0; i < knownMyos.size(); ++i) {
