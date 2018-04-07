@@ -1,8 +1,7 @@
 // hit "esc" key to quit draw at any time
 
 //TODO change buffer to random number OR some smallish movement from the last x,y coordinate
-
-
+//ArcDraw arcDraw;
 void setup() {
   size(512, 512);
 }
@@ -37,7 +36,7 @@ int accdirX = 1;
 int accdirY = 1;
 int oredirX = 1;
 int oredirY = 1;
-int i = 0;  //increment for moving around. 
+int i = 1;  //increment for moving around. 
 
 int beatDelay = 10; // TODO change the delay time so that it matches the beat of the music
 
@@ -146,8 +145,10 @@ void draw() {
     int y2 = adaptedYpt + (height/8);
     //line(x1, y1, x2, y2);
   }
-linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
-
+//linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
+//println(accdims);
+//arcDraw.test(true);
+//arcDraw.drawArc(accdims, oredims, 0);
   //handle running off the edge. I wish this were better. 
   // update: instead of bouncing back in dir from which the point came, code will loop (see mod "%")
   //if(curraccPoint[0]>512){accdirX = accdirX*-1;}
