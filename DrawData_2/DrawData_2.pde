@@ -4,6 +4,31 @@ void setup(){
   size(512,512);
 }
 
+// as safety measure, always mod by width & height to prevent overflow
+int[] safeMod(int xVal, int yVal) {
+  int[] ret = new int[2]; 
+  ret[0] = xVal%width;
+  ret[1] = yVal%height;
+  
+  return ret;
+}
+
+void linesSlantUp(int modVal, int spacing, int xVal, int yVal) {
+// every 2nd point, also include a line to spice things up
+  if (i%2 == 0) {
+    int x1 = xVal*spacing - (width/modVal);
+    int x2 = xVal*spacing + (width/modVal);
+    int y1 = yVal*spacing - (height/modVal);
+    int y2 = yVal*spacing + (height/modVal);
+    
+    // to ensure no overflow, call safety measure
+    int[] allXVals = safeMod(x1, x2);
+    int[] allYVals = safeMod(y1, y2);
+    
+    //draw line
+    line(x1,y1,x2,y2);
+  }
+}
 String[] acclines;
 String[] orelines;
 
@@ -39,6 +64,7 @@ void draw(){
   println(str(currorePoint[0]) + ", " + str(currorePoint[1]));
   
   // move points around page at more wide-spread rate to see flow better
+  // "mod" handles running off the page (but loops around instead of bouncing back in dir from which it came)
   int adaptedXpt = ((pointX*3) % width);
   int adaptedYpt = ((pointY*3) % height);
   point(adaptedXpt,adaptedYpt); // make sure the point never overwrites the buffer with %width & %height (it essentially wraps around)
@@ -55,10 +81,11 @@ void draw(){
   i++;  //increment the index one. 
   
   //handle running off the edge. I wish this were better. 
-  if(curraccPoint[0]>512){accdirX = accdirX*-1;}
-  else if((curraccPoint[1]>512)||(curraccPoint[1]<0)){ accdirY = accdirY*-1;}
-  else if ((currorePoint[0]>512)||(currorePoint[0]<512)){ oredirX = oredirX*-1;} 
-  else if ((currorePoint[1]>512)||(currorePoint[1]<0)){ oredirY = oredirY*-1;}
+// update: instead of bouncing back in dir from which the point came, code will loop (see mod "%")
+  //if(curraccPoint[0]>512){accdirX = accdirX*-1;}
+  //else if((curraccPoint[1]>512)||(curraccPoint[1]<0)){ accdirY = accdirY*-1;}
+  //else if ((currorePoint[0]>512)||(currorePoint[0]<512)){ oredirX = oredirX*-1;} 
+  //else if ((currorePoint[1]>512)||(currorePoint[1]<0)){ oredirY = oredirY*-1;}
   
   
 }
