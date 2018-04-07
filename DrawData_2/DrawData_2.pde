@@ -1,3 +1,5 @@
+// hit "esc" key to quit draw at any time
+
 void setup(){
   size(512,512);
 }
