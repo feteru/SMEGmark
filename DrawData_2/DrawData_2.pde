@@ -3,6 +3,8 @@
 void setup(){
   size(512,512);
 }
+BufferedReader reader;
+
 
 // as safety measure, always mod by width & height to prevent overflow
 int[] safeMod(int xVal, int yVal) {
@@ -29,7 +31,8 @@ void linesSlantUp(int modVal, int spacing, int xVal, int yVal) {
     line(x1,y1,x2,y2);
   }
 }
-String[] acclines;
+//String[] inputStr;
+String inputStr;
 String[] orelines;
 
 //start the acceleration and the orientation vectors at the same point. 
@@ -45,23 +48,61 @@ int i = 0;  //increment for moving around.
 
 void draw(){
   
-  //read strings from .csv files. This will be only one file in the future. 
-  acclines = loadStrings("../bigsickquick/accelerometer-1523080528.csv"); 
-  orelines = loadStrings("../bigsickquick/orientationEuler-1523080528.csv");
-  if(i > (acclines.length-2)){ delay(2000); exit(); }   
+  delay(10);
+  
+  // data input from opened/closed file: attempt 3
+     reader = createReader("../SensorRead/myo-sdk-win-0.9.0/samples/x64/Debug/outFile.txt");
+  try {
+   inputStr = reader.readLine();
+  } catch (Exception e ) {
+    System.out.println("HELP exception thrown trying to read input file");
+  }
+  
+  // data input: read strings from .txt file: attempt2
+  //File f=open("../SensorRead/myo-sdk-win-0.9.0/samples/x64/Debug/outFile.txt", "r");
+
+  // data input string from .txt: attempt 1
+  //inputStr = loadStrings("../SensorRead/myo-sdk-win-0.9.0/samples/x64/Debug/outFile.txt");
+  
+  //alternate data input: read strings from 2 .csv input files. This will be only one file in the future. 
+  //acclines = loadStrings("../bigsickquick/accelerometer-1523080528.csv"); 
+  //orelines = loadStrings("../bigsickquick/orientationEuler-1523080528.csv");
+  
+ // while(i > (inputStr.length-2)){ delay(2000); exit();}   
 
   //current acceleration reading and plotting section
-  String[] accdims = split(acclines[i], ",");
+  //String[] dataCategory = split(inputStr[i],"|");
+  
+  String[] dataCategory = new String[3];
+  if (inputStr != null) {
+  dataCategory = split(inputStr,"|");
+  } else { // fill dataCategory with dummy string to prevent null pointer exception
+  dataCategory[0] = "1,1,1";
+  dataCategory[1] = "1,1,1";
+  dataCategory[2] = "1,1,1";
+}
+  
+  
+ //   println(dataCategory[0]);
+  //   println(dataCategory[1]);
+  
+  
+  String[] accdims = split(dataCategory[1], ",");
+  String[] oredims = split(dataCategory[0], ",");
+  
+  println(dataCategory[1]);
+  println(dataCategory[0]);
   
   //int[] newpoint = pointPlot(orelines[i],curraccPoint));
-  String[] oredims = split(orelines[i], ",");
+  //String[] oredims = split(orelines[i], ",");
+  
   int pointX = int(currorePoint[0] + int(oredims[1])*-oredirX + int(accdims[1])*-accdirX);  //create new point based off of old
   int pointY = int(currorePoint[1] + int(oredims[2])*-oredirY + int(accdims[2])*-accdirY);
   if((pointX == currorePoint[0])&&(pointY==currorePoint[1])){
     //if they're the same does it matter?    
   }
   currorePoint[0] = pointX; currorePoint[1] = pointY;  //update the current orientation
-  println(str(currorePoint[0]) + ", " + str(currorePoint[1]));
+ // println(str(currorePoint[0]) + ", " + str(currorePoint[1]));
   
   // move points around page at more wide-spread rate to see flow better
   // "mod" handles running off the page (but loops around instead of bouncing back in dir from which it came)
@@ -87,6 +128,11 @@ void draw(){
   //else if ((currorePoint[0]>512)||(currorePoint[0]<512)){ oredirX = oredirX*-1;} 
   //else if ((currorePoint[1]>512)||(currorePoint[1]<0)){ oredirY = oredirY*-1;}
   
+  try {
+  reader.close(); 
+  } catch (Exception e ) {
+    System.out.println("HELP exception thrown trying to close input file");
+  }
   
 }
 
