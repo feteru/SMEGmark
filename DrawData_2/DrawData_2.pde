@@ -158,7 +158,7 @@ arcDraw.drawArc(accdims, oredims, 0);
 if (!readFromExcel) { // if not reading from excel, it's reading from a .txt so we open/close file in each loop
   try {
     reader.close();
-  }
+  } 
   catch (Exception e ) {
     System.out.println("HELP exception thrown trying to close input file");
   }
