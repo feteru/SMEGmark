@@ -1,5 +1,8 @@
 // hit "esc" key to quit draw at any time
 
+//TODO change buffer to random number OR some smallish movement from the last x,y coordinate
+// TODO change the delay time so that it matches the beat of the music
+
 void setup(){
   size(512,512);
 }
