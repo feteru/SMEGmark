@@ -3,7 +3,7 @@ class ArcDraw  {
 
   float[] drawArc(String[] accdims, String[] oredims, float[] ends) {
     int pointX = width / 2; int pointY = height/2;
-    delay(50);
+   // delay(100);
 
     xdim = abs(float(accdims[1])*100);
     ydim = abs(float(accdims[2])*100);

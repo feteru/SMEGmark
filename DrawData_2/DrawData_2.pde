@@ -2,6 +2,8 @@
 
 //TODO change buffer to random number OR some smallish movement from the last x,y coordinate
 ArcDraw arcDraw = new ArcDraw();
+ColorArcDraw colorArcDraw = new ColorArcDraw();
+
 
 void setup() {
   size(512, 512);
@@ -45,7 +47,6 @@ int beatDelay = 10; // TODO change the delay time so that it matches the beat of
 float[] ends = {0,10};
 
 
-
 //****************************
 // SUPPORT FUNCTIONS
 //****************************
@@ -56,25 +57,6 @@ int[] safeMod(int xVal, int yVal) {
   ret[1] = yVal%height;
 
   return ret; // ret[0] = x, ret[1] = y
-}
-
-//void point(adaptedXpt,adaptedYpt); 
-
-void linesSlantUp(int freq, int lineLeng, int spacing, int xVal, int yVal) { // highest freq at 1, 
-  // every 2nd point, also include a line to spice things up
-  if (i%freq == 0) {
-    int x1 = xVal*spacing - (width/lineLeng);
-    int x2 = xVal*spacing + (width/lineLeng);
-    int y1 = yVal*spacing - (height/lineLeng);
-    int y2 = yVal*spacing + (height/lineLeng);
-
-    // to ensure no overflow, call safety measure
-    int[] allXVals = safeMod(x1, x2);
-    int[] allYVals = safeMod(y1, y2);
-
-    //draw line
-    line(allXVals[0], allYVals[0], allXVals[1], allYVals[1]);
-  }
 }
 
 //****************************
@@ -116,8 +98,7 @@ void draw() {
   } else {
     System.out.println("ERROR invalid boolean input for readFromExcel");
   }
-
-      
+  
       accdims = split(dataCategory[0], ",");
       oredims = split(dataCategory[1], ",");
    
@@ -148,8 +129,8 @@ void draw() {
   //linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
   
   println(accdims);
-  ends = arcDraw.drawArc(accdims, oredims, ends);
-  
+ // ends = arcDraw.drawArc(accdims, oredims, ends);
+ ends = colorArcDraw.drawArc(accdims, oredims, ends);
   
   
   
@@ -170,21 +151,7 @@ if (!readFromExcel) { // if not reading from excel, it's reading from a .txt so 
 } else {
     i++;  //increment the index one. only valid for excel input (no needed for .txt)
 }
+
+  
+save("./artworkOutput.jpg");
 }
-
-
-//void pointPlot(String line, int[] currPoint, int type){
-
-//  String[] split = split(line,",");
-//  if(type==0){
-//   pointX =  
-//  }
-//  int pointX = int(curraccPoint[0] + int(accdims[1])*-accdirX);
-//  int pointY = int(curraccPoint[1] + int(accdims[2])*-accdirY);
-//  curraccPoint[0] = pointX;
-//  curraccPoint[1] = pointY;
-//  println(curraccPoint);
-
-
-
-//}
