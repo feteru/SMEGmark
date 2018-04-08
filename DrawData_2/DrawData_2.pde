@@ -155,3 +155,12 @@ if (!readFromExcel) { // if not reading from excel, it's reading from a .txt so 
   
 save("./artworkOutput.jpg");
 }
+
+// press "s" at any time to save the current image on screen
+void keyPressed(){
+  if(key == 's'){
+    println("Saving...");
+    saveFrame("screen-####.jpg");
+    println("Done saving.");
+  }
+}
