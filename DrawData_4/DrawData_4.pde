@@ -104,6 +104,10 @@ void draw() {
     // if has reached the end of the csv file read
     try {
       allData = split(inputCSVLines[i], ","); // iterates through csv file
+      
+    if (allData == null) {
+      exit();
+    }
 
       if (inputCSVLines == null || inputCSVLines[i] == null) {
         //exit(); 
@@ -113,32 +117,29 @@ void draw() {
     catch (Exception EOF) {
       System.out.println("reached end of csv file");
       stop();
+      //exit();
     }
-
-
-    if (allData == null) {
-      exit();
-    } else { 
+      try {
       // myo 1
       dataCategory[0][0] = allData[0]+","+allData[1]+","+allData[2]; // acceleration data 
       dataCategory[0][1] = allData[3]+","+allData[4]+","+allData[5]; // orienation data 
       dataCategory[0][2] = allData[6]+","+allData[7]+","+allData[8]; //gyro data 
-      dataCategory[0][3] = allData[9];
-      ; // emg data 
+      dataCategory[0][3] = allData[9]; // emg data 
 
       // myo 2
       dataCategory[1][0] = allData[10]+","+allData[11]+","+allData[12]; // acceleration data 
       dataCategory[1][1] = allData[13]+","+allData[14]+","+allData[15]; // orienation data 
       dataCategory[1][2] = allData[16]+","+allData[17]+","+allData[18]; //gyro data 
-      dataCategory[1][3] = allData[19];
-      ; // emg data
+      dataCategory[1][3] = allData[19]; // emg data
+    
+    } catch (Exception emptyDataException) {
+      System.out.println("allData is null or empty");
     }
-
-    // not sure what to do with this "while" code yet:
-    // while(i > (inputStr.length()-2)){ delay(2000); exit();}
   } else {
     System.out.println("ERROR invalid boolean input for readFromExcel");
   }
+  
+  try {
   // myo 1
   accdims[0] = split(dataCategory[0][0], ","); // x/y/z accel
   oredims[0] = split(dataCategory[0][1], ",");
@@ -146,6 +147,10 @@ void draw() {
   // myo 2
   accdims[1] = split(dataCategory[1][0], ","); // x/y/z accel
   oredims[1] = split(dataCategory[1][1], ",");
+  } catch (Exception splitDataCategoryException) {
+   println("exit file at  splitDataCategoryException");
+   exit();
+  }
 
 
   println("myo 1 accel: "+dataCategory[0][0]+", myo 2 accel: "+dataCategory[1][0]);
