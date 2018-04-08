@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <string>
 #include <algorithm>
-
+#include <array>
 #include <fstream>
 
 // The only file that needs to be included to use the Myo C++ SDK is myo.hpp.
@@ -19,7 +19,7 @@
 class DataCollector : public myo::DeviceListener {
 public:
     DataCollector()
-		: onArm(false), isUnlocked(false), roll_w{ 0,0 }, pitch_w{ 0,0 }, yaw_w{ 0,0 }, roll{ 0,0 }, yaw{ 0,0 }, pitch{ 0,0 }, gyrox{ 0,0 }, gyroy{ 0,0 }, gyroz{ 0,0 }, accelx{ 0,0 }, accely{ 0,0 }, accelz{ 0,0 }, currentPose()
+		: onArm(false), isUnlocked(false), roll_w{ 0,0 }, pitch_w{ 0,0 }, yaw_w{ 0,0 }, roll{ 0,0 }, yaw{ 0,0 }, pitch{ 0,0 }, gyrox{ 0,0 }, gyroy{ 0,0 }, gyroz{ 0,0 }, accelx{ 0,0 }, accely{ 0,0 }, accelz{ 0,0 }, emgOver{ 0,0 }, currentPose()
     {
 		if (logFile.is_open()) {
 			logFile.close();
