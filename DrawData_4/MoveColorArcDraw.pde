@@ -22,14 +22,7 @@ class MoveColorArcDraw  {
     noStroke();
    // strokeWeight(3);  // thickness of line (1 is default)
     fill(ends[0]%255, xdim%255, ydim%255); // color of fill: between 0 and 255
-    //HOW-TO use fill:  
-    //fill(rgb)
-    //fill(rgb, alpha) // alpha float specifies opacity of the fill
-    //fill(gray) // (float specifies val between white & black)
-    //fill(gray, alpha)
-      //fill(v1, v2, v3)
-      //fill(v1, v2, v3, alpha)
-    // v1 = red or hue, v2 = green or saturdation, v3 =blue or brightness
+   
     arc(center[0]%width, center[1]%height, xdim, ydim, ends[0], ends[1], OPEN);
     return ends;
   }
