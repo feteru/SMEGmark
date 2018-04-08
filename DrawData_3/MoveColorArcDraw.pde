@@ -7,8 +7,10 @@ class MoveColorArcDraw  {
     //int pointX = width / 2; int pointY = height/2;
    // delay(100);
     //move the center around.
-    center[0] = center[0] + -3*float(accdims[3]);
-    center[1] = center[1] + 3*float(oredims[2]);
+    center[0] = center[0] + 3*float(oredims[2]);
+    center[1] = center[1] - 3*float(accdims[3]) + 1.5;
+    
+    
     
     //change the size of the arcs that are generated
     xdim = abs(float(accdims[1])*100);
