@@ -2,11 +2,12 @@
 
 //TODO change buffer to random number OR some smallish movement from the last x,y coordinate
 ArcDraw arcDraw = new ArcDraw();
-ColorArcDraw colorArcDraw = new ColorArcDraw();
+MoveColorArcDraw moveColorArcDraw = new MoveColorArcDraw();
 
 
 void setup() {
   size(512, 512);
+  background(0);
 }
 //*********************
 // INIT VARIABLES 
@@ -45,7 +46,8 @@ int beatDelay = 10; // TODO change the delay time so that it matches the beat of
 
 //start and stop for arc lengths
 float[] ends = {0,10};
-
+//center for moving arc drawing
+float[] center = {width/2, height/2};
 
 //****************************
 // SUPPORT FUNCTIONS
@@ -130,7 +132,7 @@ void draw() {
   
   println(accdims);
  // ends = arcDraw.drawArc(accdims, oredims, ends);
- ends = colorArcDraw.drawArc(accdims, oredims, ends);
+ ends = moveColorArcDraw.drawArc(accdims, oredims, ends, center);
   
   
   
