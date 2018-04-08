@@ -135,7 +135,7 @@ void draw() {
   println(accdims);
  // ends = arcDraw.drawArc(accdims, oredims, ends);
    //ends = moveColorArcDraw.drawArc(accdims, oredims, ends, center);
-  rectDraw.Rectangles(accdims, oredims, corner1);
+  //rectDraw.Rectangles(accdims, oredims, corner1);
   
   
   //handle running off the edge. I wish this were better. 
