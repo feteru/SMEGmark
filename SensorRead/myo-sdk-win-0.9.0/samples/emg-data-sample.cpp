@@ -29,8 +29,13 @@ public:
     // onEmgData() is called whenever a paired Myo has provided new EMG data, and EMG streaming is enabled.
     void onEmgData(myo::Myo* myo, uint64_t timestamp, const int8_t* emg)
     {
+		over = 0;
         for (int i = 0; i < 8; i++) {
-            emgSamples[i] = emg[i];
+			if (emg[i] > 0.3) {
+				over++;
+				emgSamples[i] = 1;
+			}
+			else emgSamples[i] = 0;
         }
     }
 
@@ -51,12 +56,14 @@ public:
 
             std::cout << '[' << emgString << std::string(4 - emgString.size(), ' ') << ']';
         }
+		std::cout << "\tOver Threshold: " << over;
 
         std::cout << std::flush;
     }
 
     // The values of this array is set by onEmgData() above.
     std::array<int8_t, 8> emgSamples;
+	int over = 0;
 };
 
 int main(int argc, char** argv)

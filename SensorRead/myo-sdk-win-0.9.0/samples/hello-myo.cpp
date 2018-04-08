@@ -59,6 +59,7 @@ public:
 		accelx[0] = 0; accelx[1] = 0;
 		accely[0] = 0; accely[1] = 0;
 		accelz[0] = 0; accelz[1] = 0;
+		emgOver[0] = 0; emgOver[1] = 0;
         onArm = false;
         isUnlocked = false;
     }
@@ -92,6 +93,7 @@ public:
 		pitch_w[which] = static_cast<int>(((asin(max(-1.0f, min(1.0f, 2.0f * (quat.w() * quat.y() - quat.z() * quat.x()))))) + (float)M_PI / 2.0f) / M_PI * 18);
 		yaw_w[which] = static_cast<int>(((atan2(2.0f * (quat.w() * quat.z() + quat.x() * quat.y()),
 			1.0f - 2.0f * (quat.y() * quat.y() + quat.z() * quat.z()))) + (float)M_PI) / (M_PI * 2.0f) * 18);
+		
 		//std::cout << "0:" << yaw_w[0] << "\t\t\t1:" << yaw_w[1] << std::endl;
     }
 
@@ -175,6 +177,19 @@ public:
 		gyroz[which] = static_cast<float>(gyro.z());
 	}
 
+	// onEmgData() is called whenever a paired Myo has provided new EMG data, and EMG streaming is enabled.
+	void onEmgData(myo::Myo* myo, uint64_t timestamp, const int8_t* emg)
+	{
+		int which = (int)(identifyMyo(myo) - 1);
+		emgOver[which] = 0;
+		for (int i = 0; i < 8; i++) {
+			if (emg[i] > 0.5) {
+				emgOver[which]++;
+				emgSamples[i] = 1;
+			}
+			else emgSamples[i] = 0;
+		}
+	}
 	size_t identifyMyo(myo::Myo* myo) {
 		// Walk through the list of Myo devices that we've seen pairing events for.
 		for (size_t i = 0; i < knownMyos.size(); ++i) {
@@ -221,10 +236,10 @@ public:
 		}
 		outFile.open("outFile.txt", std::ios::out);
 
-		outFile << roll_w[0] << ',' << pitch_w[0] << ',' << yaw_w[0] << '|' << accelx[0] << ',' << accely[0] << ',' << accelz[0] << '|' << gyrox[0] << ',' << gyroy[0] << ',' << gyroz[0] << ';' << roll_w[1] << ',' << pitch_w[1] << ',' << yaw_w[1] << '|' << accelx[1] << ',' << accely[1] << ',' << accelz[1] << '|' << gyrox[1] << ',' << gyroy[1] << ',' << gyroz[1] << std::endl;
+		outFile << roll_w[0] << ',' << pitch_w[0] << ',' << yaw_w[0] << '|' << accelx[0] << ',' << accely[0] << ',' << accelz[0] << '|' << gyrox[0] << ',' << gyroy[0] << ',' << gyroz[0] << '|' << emgOver[0] << ';' << roll_w[1] << ',' << pitch_w[1] << ',' << yaw_w[1] << '|' << accelx[1] << ',' << accely[1] << ',' << accelz[1] << '|' << gyrox[1] << ',' << gyroy[1] << ',' << gyroz[1] << '|' << emgOver[1] << std::endl;
 		outFile.close();
 
-		logFile << roll_w[0] << ',' << pitch_w[0] << ',' << yaw_w[0] << ',' << accelx[0] << ',' << accely[0] << ',' << accelz[0] << ',' << gyrox[0] << ',' << gyroy[0] << ',' << gyroz[0] << ',' << roll_w[1] << ',' << pitch_w[1] << ',' << yaw_w[1] << ',' << accelx[1] << ',' << accely[1] << ',' << accelz[1] << ',' << gyrox[1] << ',' << gyroy[1] << ',' << gyroz[1] << std::endl;
+		logFile << roll_w[0] << ',' << pitch_w[0] << ',' << yaw_w[0] << ',' << accelx[0] << ',' << accely[0] << ',' << accelz[0] << ',' << gyrox[0] << ',' << gyroy[0] << ',' << gyroz[0] << ',' << emgOver[0] << ',' << roll_w[1] << ',' << pitch_w[1] << ',' << yaw_w[1] << ',' << accelx[1] << ',' << accely[1] << ',' << accelz[1] << ',' << gyrox[1] << ',' << gyroy[1] << ',' << gyroz[1] << ',' << emgOver[1] << std::endl;
 
     }
 
@@ -240,7 +255,9 @@ public:
 	float roll[2], pitch[2], yaw[2];
 	float accelx[2], accely[2], accelz[2];
 	float gyrox[2], gyroy[2], gyroz[2];
+	int emgOver[2];
     myo::Pose currentPose;
+	std::array<int8_t, 8> emgSamples;
 
 	std::ofstream outFile;
 	std::ofstream logFile;
