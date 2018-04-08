@@ -121,14 +121,14 @@ void draw() {
     }
       try {
       // myo 1
-      dataCategory[0][0] = allData[0]+","+allData[1]+","+allData[2]; // acceleration data 
-      dataCategory[0][1] = allData[3]+","+allData[4]+","+allData[5]; // orienation data 
+      dataCategory[0][0] = allData[0]+","+allData[1]+","+allData[2]; // orienation data
+      dataCategory[0][1] = allData[3]+","+allData[4]+","+allData[5]; //  acceleration data 
       dataCategory[0][2] = allData[6]+","+allData[7]+","+allData[8]; //gyro data 
       dataCategory[0][3] = allData[9]; // emg data 
 
       // myo 2
-      dataCategory[1][0] = allData[10]+","+allData[11]+","+allData[12]; // acceleration data 
-      dataCategory[1][1] = allData[13]+","+allData[14]+","+allData[15]; // orienation data 
+      dataCategory[1][0] = allData[10]+","+allData[11]+","+allData[12]; // orienation data
+      dataCategory[1][1] = allData[13]+","+allData[14]+","+allData[15]; //  acceleration data 
       dataCategory[1][2] = allData[16]+","+allData[17]+","+allData[18]; //gyro data 
       dataCategory[1][3] = allData[19]; // emg data
     
@@ -141,20 +141,20 @@ void draw() {
   
   try {
   // myo 1
-  accdims[0] = split(dataCategory[0][0], ","); // x/y/z accel
-  oredims[0] = split(dataCategory[0][1], ",");
+  accdims[0] = split(dataCategory[0][1], ","); // x/y/z accel
+  oredims[0] = split(dataCategory[0][0], ",");
 
   // myo 2
-  accdims[1] = split(dataCategory[1][0], ","); // x/y/z accel
-  oredims[1] = split(dataCategory[1][1], ",");
+  accdims[1] = split(dataCategory[1][1], ","); // x/y/z accel
+  oredims[1] = split(dataCategory[1][0], ",");
   } catch (Exception splitDataCategoryException) {
    println("exit file at  splitDataCategoryException");
    exit();
   }
 
 
-  println("myo 1 accel: "+dataCategory[0][0]+", myo 2 accel: "+dataCategory[1][0]);
-  println("myo 1 oredims: "+dataCategory[0][1]+", myo 2 oredims: "+dataCategory[1][1]);
+  println("myo 1 accel: "+dataCategory[0][1]+", myo 2 accel: "+dataCategory[1][1]);
+  println("myo 1 oredims: "+dataCategory[0][0]+", myo 2 oredims: "+dataCategory[1][0]);
   println();
 
   //int[] newpoint = pointPlot(orelines[i],curraccPoint));
@@ -175,24 +175,15 @@ void draw() {
   currorePoint[1][1] = pointY[1]; 
   // println(str(currorePoint[0]) + ", " + str(currorePoint[1]));  // println for debugging:
 
-  // move points around page at more wide-spread rate to see flow better
-  // "mod" handles running off the page (but loops around instead of bouncing back in dir from which it came)
-
-  int adaptedXpt = safeMod(3*pointX[0], 3*pointY[0])[0];
-  int adaptedYpt = safeMod(3*pointX[0], 3*pointY[0])[1];
-
   //point(adaptedXpt, adaptedYpt); // make sure the point never overwrites the buffer with %width & %height (it essentially wraps around)
 
 
   //linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
 
-  println(accdims);
-  // ends = arcDraw.drawArc(accdims, oredims, ends);
-
-  //float[] drawArc(String[] accdims, String[] oredims, float[] ends, float[] center) {
+  ends[0] = moveColorArcDraw.drawArc(oredims[0], accdims[0], ends[0], center[0]); // let's run in reverse (swap oredims & accdims)
 
   // call from both myo 1 and myo 2 at once (handled by TrianglesDraw class)
-  trianglesDraw.drawTriangles(accdims, oredims);
+ // trianglesDraw.drawTriangles(accdims, oredims);
 
 
   //handle running off the edge. I wish this were better. 
@@ -214,7 +205,7 @@ void draw() {
   }
 
 
-  save("./artworkOutput.jpg");
+  save("//192.168.2.220/abarai/Servers/aodMARK/www/01.jpg");
 }
 
 // press "s" at any time to save the current image on screen
