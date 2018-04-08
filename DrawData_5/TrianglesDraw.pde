@@ -10,21 +10,23 @@ class TrianglesDraw  {
       yl2 = (yl1 + int(oredims[0][1]))%height; yr2 = (yr1 + int(oredims[1][1]))%height;
       xl3 = (xl1 + int(oredims[0][2]))%width; xr3 = (xr1 - int(oredims[1][2]))%width;
       yl3 = (yl1 + int(oredims[0][2]))%height; yr3 = (yr1 + int(oredims[1][2]))%height;
-      fill((abs(float(accdims[0][1]))*(255/1.2))%255,(abs(float(accdims[0][2]))*(255/1.2))%255,(abs(float(accdims[0][3]))*(255/1.2))%255);
+      fill((abs(float(accdims[0][0]))*(255/1.2))%255,(abs(float(accdims[0][1]))*(255/1.2))%255,(abs(float(accdims[0][2]))*(255/1.2))%255);
       triangle(xl1,yl1,xl2,yl2,xl3,yl3);
-      fill((abs(float(accdims[1][1]))*(255/1.2))%255,(abs(float(accdims[1][2]))*(255/1.2))%255,(abs(float(accdims[1][3]))*(255/1.2))%255);
+      fill((abs(float(accdims[1][0]))*(255/1.2))%255,(abs(float(accdims[1][1]))*(255/1.2))%255,(abs(float(accdims[1][2]))*(255/1.2))%255);
       triangle(xr1,yr1,xr2,yr2,xr3,yr3);
       xl1 = xl2; yl1 = yl2;
       xr1 = xr2; yr1 = yr2;
       xl2 = xl3; yl2 = yl3;
       xr2 = xr3; yr2 = yr3;
+      twoVertices = false;
     } else {
       xl1 = (xl2 + int(oredims[0][2]))%width; xr1 = (xr2 - int(oredims[1][2]))%width;
       yl1 = (yl2 + int(oredims[0][2]))%height; yr1 = (yr2 + int(oredims[1][2]))%height;
-      fill((abs(float(accdims[0][1]))*(255/1.2))%255,(abs(float(accdims[0][2]))*(255/1.2))%255,(abs(float(accdims[0][3]))*(255/1.2))%255);
+      fill((abs(float(accdims[0][0]))*(255/1.2))%255,(abs(float(accdims[0][1]))*(255/1.2))%255,(abs(float(accdims[0][2]))*(255/1.2))%255);
       triangle(xl1,yl1,xl2,yl2,xl3,yl3);
-      fill((abs(float(accdims[1][1]))*(255/1.2))%255,(abs(float(accdims[1][2]))*(255/1.2))%255,(abs(float(accdims[1][3]))*(255/1.2))%255);
+      fill((abs(float(accdims[1][0]))*(255/1.2))%255,(abs(float(accdims[1][1]))*(255/1.2))%255,(abs(float(accdims[1][2]))*(255/1.2))%255);
       triangle(xr1,yr1,xr2,yr2,xr3,yr3);
+      twoVertices = true;
     }
   }
   

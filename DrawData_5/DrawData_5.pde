@@ -4,7 +4,7 @@
 // NOTE the current csv log read is not configured for 2 myo devices
 ArcDraw arcDraw = new ArcDraw();
 MoveColorArcDraw moveColorArcDraw = new MoveColorArcDraw();
-
+TrianglesDraw trianglesDraw = new TrianglesDraw();
 
 void setup() {
   size(512, 512);
@@ -191,9 +191,8 @@ void draw() {
 
   //float[] drawArc(String[] accdims, String[] oredims, float[] ends, float[] center) {
 
-  // call from first myo
-  ends[0] = moveColorArcDraw.drawArc(accdims[0], oredims[0], ends[0], center[0]);
-
+  // call from both myo 1 and myo 2 at once (handled by TrianglesDraw class)
+  trianglesDraw.drawTriangles(accdims, oredims);
 
 
   //handle running off the edge. I wish this were better. 
