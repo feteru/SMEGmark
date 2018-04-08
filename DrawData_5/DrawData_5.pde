@@ -4,10 +4,11 @@
 // NOTE the current csv log read is not configured for 2 myo devices
 ArcDraw arcDraw = new ArcDraw();
 MoveColorArcDraw moveColorArcDraw = new MoveColorArcDraw();
-TrianglesDraw trianglesDraw = new TrianglesDraw();
+RelativeTriangleDraw trianglesDraw = new RelativeTriangleDraw();
 
 void setup() {
   size(512, 512);
+ // size(1024, 1024);
   background(0);
 }
 //*********************
@@ -65,7 +66,7 @@ int[] safeMod(int xVal, int yVal) {
 //****************************
 void draw() {
 
-  delay(beatDelay);
+  //delay(beatDelay);
 
   //roll1,pitch1,yaw1|accelx1,accely1,accelz1|gyrox1,gyroy1,gyroz1|emgOver1;
   String[][] dataCategory = new String[2][4]; // save separate data strings into this arr ([0] = accellims, [1] = orelims, [2] = gyroz, [3] = emg)
@@ -180,18 +181,10 @@ void draw() {
 
   //linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
 
-  ends[0] = moveColorArcDraw.drawArc(oredims[0], accdims[0], ends[0], center[0]); // let's run in reverse (swap oredims & accdims)
-
-  // call from both myo 1 and myo 2 at once (handled by TrianglesDraw class)
- // trianglesDraw.drawTriangles(accdims, oredims);
-
-
-  //handle running off the edge. I wish this were better. 
-  // update: instead of bouncing back in dir from which the point came, code will loop (see mod "%")
-  //if(curraccPoint[0]>512){accdirX = accdirX*-1;}
-  //else if((curraccPoint[1]>512)||(curraccPoint[1]<0)){ accdirY = accdirY*-1;}
-  //else if ((currorePoint[0]>512)||(currorePoint[0]<512)){ oredirX = oredirX*-1;} 
-  //else if ((currorePoint[1]>512)||(currorePoint[1]<0)){ oredirY = oredirY*-1;}
+ ends[0] = moveColorArcDraw.drawArc(accdims[1], oredims[0], ends[0], center[0]); 
+ 
+   // call from both myo 1 and myo 2 at once (handled by TrianglesDraw class)
+   // trianglesDraw.drawTriangles(accdims,oredims, center);
 
   if (!readFromExcel) { // if not reading from excel, it's reading from a .txt so we open/close file in each loop
     try {
@@ -203,16 +196,17 @@ void draw() {
   } else {
     i++;  //increment the index one. only valid for excel input (no needed for .txt)
   }
-
-
-  save("//192.168.2.220/abarai/Servers/aodMARK/www/01.jpg");
+  
+  //save("//192.168.2.220/abarai/Servers/aodMARK/www/01.jpg");
+  save("C:/Users/emmac/Documents/Bitcamp2018_Art/saveImageFile.jpg");
 }
 
 // press "s" at any time to save the current image on screen
 void keyPressed() {
   if (key == 's') {
     println("Saving...");
-    saveFrame("screen-####.jpg");
+    saveFrame("C:/Users/emmac/Documents/Bitcamp2018_Art/screen-####.jpg");
+    //saveFrame("//192.168.2.220/abarai/Servers/aodMARK/www/screen-####.jpg");
     println("Done saving.");
   }
 }
