@@ -3,7 +3,7 @@
 //TODO change buffer to random number OR some smallish movement from the last x,y coordinate
 ArcDraw arcDraw = new ArcDraw();
 MoveColorArcDraw moveColorArcDraw = new MoveColorArcDraw();
-
+BasicShapeLib rectDraw = new BasicShapeLib();
 
 void setup() {
   size(512, 512);
@@ -44,8 +44,10 @@ int i = 1;  //increment for moving around.
 
 int beatDelay = 10; // TODO change the delay time so that it matches the beat of the music
 
-//start and stop for arc lengths
+//start and stop for arc drawing.
 float[] ends = {0,10};
+//start for rectangle drawing (and also end? (past? (and also future?)))
+float[] corner1 = {0,0};
 //center for moving arc drawing
 float[] center = {width/2, height/2};
 
@@ -132,8 +134,8 @@ void draw() {
   
   println(accdims);
  // ends = arcDraw.drawArc(accdims, oredims, ends);
- ends = moveColorArcDraw.drawArc(accdims, oredims, ends, center);
-  
+   //ends = moveColorArcDraw.drawArc(accdims, oredims, ends, center);
+  rectDraw.Rectangles(accdims, oredims, corner1);
   
   
   //handle running off the edge. I wish this were better. 
