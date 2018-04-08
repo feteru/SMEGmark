@@ -6,6 +6,7 @@ void setup() {
   Serial.begin(9600);
   inputString.reserve(20);
   pinMode(13,OUTPUT);
+}
 
 void loop() {
   if (stringComplete) {
