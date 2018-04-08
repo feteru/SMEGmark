@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <string>
 #include <algorithm>
-#include <array>
+//#include <array>
 #include <fstream>
 
 // The only file that needs to be included to use the Myo C++ SDK is myo.hpp.
@@ -181,13 +181,13 @@ public:
 	void onEmgData(myo::Myo* myo, uint64_t timestamp, const int8_t* emg)
 	{
 		int which = (int)(identifyMyo(myo) - 1);
-		emgOver[which] = 0;
+		//emgOver[which] = 0;
 		for (int i = 0; i < 8; i++) {
 			if (emg[i] > 0.5) {
 				emgOver[which]++;
-				emgSamples[i] = 1;
+				//emgSamples[i] = 1;
 			}
-			else emgSamples[i] = 0;
+			//else emgSamples[i] = 0;
 		}
 	}
 	size_t identifyMyo(myo::Myo* myo) {
@@ -240,7 +240,6 @@ public:
 		outFile.close();
 
 		logFile << roll_w[0] << ',' << pitch_w[0] << ',' << yaw_w[0] << ',' << accelx[0] << ',' << accely[0] << ',' << accelz[0] << ',' << gyrox[0] << ',' << gyroy[0] << ',' << gyroz[0] << ',' << emgOver[0] << ',' << roll_w[1] << ',' << pitch_w[1] << ',' << yaw_w[1] << ',' << accelx[1] << ',' << accely[1] << ',' << accelz[1] << ',' << gyrox[1] << ',' << gyroy[1] << ',' << gyroz[1] << ',' << emgOver[1] << std::endl;
-
     }
 
     // These values are set by onArmSync() and onArmUnsync() above.
@@ -257,7 +256,7 @@ public:
 	float gyrox[2], gyroy[2], gyroz[2];
 	int emgOver[2];
     myo::Pose currentPose;
-	std::array<int8_t, 8> emgSamples;
+	//std::array<int8_t, 8> emgSamples;
 
 	std::ofstream outFile;
 	std::ofstream logFile;
