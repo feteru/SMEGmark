@@ -90,6 +90,9 @@ void draw() {
     orelines = loadStrings(fileInputXSL_orientEuler);
     
      //current acceleration reading and plotting section (iterating down xls file with i)
+     if (i >= acclines.length || i >= orelines.length) {
+       exit();
+     }
     dataCategory[0] = acclines[i];
     dataCategory[1] = orelines[i];
 

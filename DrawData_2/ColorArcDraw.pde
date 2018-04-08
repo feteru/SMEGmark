@@ -23,7 +23,11 @@ class ColorArcDraw  {
       //fill(v1, v2, v3)
       //fill(v1, v2, v3, alpha)
     // v1 = red or hue, v2 = green or saturdation, v3 =blue or brightness
-    arc(pointX, pointY, xdim, ydim, ends[0], ends[1], OPEN);
+    
+    
+ //   arc(pointX, pointY, (5*xdim)%width, (7*ydim)%height, ends[0], ends[1], OPEN); // fills page
+    arc(pointX, pointY, (xdim)%width, (ydim)%height, ends[0], ends[1], OPEN);
+
     return ends;
   }
   
