@@ -12,7 +12,8 @@ class ColorArcDraw  {
     ends[1] = ends[0] + abs(float(oredims[1]));
     pstop = ends[1];
     
-    strokeWeight(4);  // thickness of line (1 is default)
+    noStroke();
+   // strokeWeight(3);  // thickness of line (1 is default)
     fill(ends[0]%255, xdim%255, ydim%255); // color of fill: between 0 and 255
     //HOW-TO use fill:  
     //fill(rgb)
