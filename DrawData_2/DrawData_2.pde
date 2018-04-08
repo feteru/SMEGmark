@@ -1,7 +1,10 @@
 // hit "esc" key to quit draw at any time
 
 //TODO change buffer to random number OR some smallish movement from the last x,y coordinate
-ArcDraw arcDraw;
+ArcDraw arcDraw = new ArcDraw();
+ColorArcDraw colorArcDraw = new ColorArcDraw();
+
+
 void setup() {
   size(512, 512);
 }
@@ -40,6 +43,9 @@ int i = 1;  //increment for moving around.
 
 int beatDelay = 10; // TODO change the delay time so that it matches the beat of the music
 
+//start and stop for arc lengths
+float[] ends = {0,10};
+
 
 //****************************
 // SUPPORT FUNCTIONS
@@ -51,25 +57,6 @@ int[] safeMod(int xVal, int yVal) {
   ret[1] = yVal%height;
 
   return ret; // ret[0] = x, ret[1] = y
-}
-
-//void point(adaptedXpt,adaptedYpt); 
-
-void linesSlantUp(int freq, int lineLeng, int spacing, int xVal, int yVal) { // highest freq at 1, 
-  // every 2nd point, also include a line to spice things up
-  if (i%freq == 0) {
-    int x1 = xVal*spacing - (width/lineLeng);
-    int x2 = xVal*spacing + (width/lineLeng);
-    int y1 = yVal*spacing - (height/lineLeng);
-    int y2 = yVal*spacing + (height/lineLeng);
-
-    // to ensure no overflow, call safety measure
-    int[] allXVals = safeMod(x1, x2);
-    int[] allYVals = safeMod(y1, y2);
-
-    //draw line
-    line(allXVals[0], allYVals[0], allXVals[1], allYVals[1]);
-  }
 }
 
 //****************************
@@ -103,6 +90,9 @@ void draw() {
     orelines = loadStrings(fileInputXSL_orientEuler);
     
      //current acceleration reading and plotting section (iterating down xls file with i)
+     if (i >= acclines.length || i >= orelines.length) {
+       exit();
+     }
     dataCategory[0] = acclines[i];
     dataCategory[1] = orelines[i];
 
@@ -111,8 +101,7 @@ void draw() {
   } else {
     System.out.println("ERROR invalid boolean input for readFromExcel");
   }
-
-      
+  
       accdims = split(dataCategory[0], ",");
       oredims = split(dataCategory[1], ",");
    
@@ -130,28 +119,24 @@ void draw() {
   currorePoint[0] = pointX; 
   currorePoint[1] = pointY;  //update the current orientation
   // println(str(currorePoint[0]) + ", " + str(currorePoint[1]));  // println for debugging:
-
+  
   // move points around page at more wide-spread rate to see flow better
   // "mod" handles running off the page (but loops around instead of bouncing back in dir from which it came)
-
+  
   int adaptedXpt = safeMod(3*pointX, 3*pointY)[0];
   int adaptedYpt = safeMod(3*pointX, 3*pointY)[1];
   
-  point(adaptedXpt, adaptedYpt); // make sure the point never overwrites the buffer with %width & %height (it essentially wraps around)
-
-  // every 2nd point, also include a line to spice things up
-  if (i%2 == 0) {
-    int x1 = adaptedXpt - (width/8);
-    int x2 = adaptedXpt + (width/8);
-    int y1 = adaptedYpt - (height/8);
-    int y2 = adaptedYpt + (height/8);
-    line(x1, y1, x2, y2);
-  }
-//linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
-
-//println(accdims);
-//arcDraw.test(true);
-//arcDraw.drawArc(accdims, oredims, 0);
+  //point(adaptedXpt, adaptedYpt); // make sure the point never overwrites the buffer with %width & %height (it essentially wraps around)
+  
+  
+  //linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
+  
+  println(accdims);
+ // ends = arcDraw.drawArc(accdims, oredims, ends);
+ ends = colorArcDraw.drawArc(accdims, oredims, ends);
+  
+  
+  
   //handle running off the edge. I wish this were better. 
   // update: instead of bouncing back in dir from which the point came, code will loop (see mod "%")
   //if(curraccPoint[0]>512){accdirX = accdirX*-1;}
@@ -162,28 +147,23 @@ void draw() {
 if (!readFromExcel) { // if not reading from excel, it's reading from a .txt so we open/close file in each loop
   try {
     reader.close();
-  }
+  } 
   catch (Exception e ) {
     System.out.println("HELP exception thrown trying to close input file");
   }
 } else {
     i++;  //increment the index one. only valid for excel input (no needed for .txt)
 }
+
+  
+save("./artworkOutput.jpg");
 }
 
-
-//void pointPlot(String line, int[] currPoint, int type){
-
-//  String[] split = split(line,",");
-//  if(type==0){
-//   pointX =  
-//  }
-//  int pointX = int(curraccPoint[0] + int(accdims[1])*-accdirX);
-//  int pointY = int(curraccPoint[1] + int(accdims[2])*-accdirY);
-//  curraccPoint[0] = pointX;
-//  curraccPoint[1] = pointY;
-//  println(curraccPoint);
-
-
-
-//}
+// press "s" at any time to save the current image on screen
+void keyPressed(){
+  if(key == 's'){
+    println("Saving...");
+    saveFrame("screen-####.jpg");
+    println("Done saving.");
+  }
+}
