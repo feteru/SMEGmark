@@ -4,11 +4,11 @@
 // NOTE the current csv log read is not configured for 2 myo devices
 ArcDraw arcDraw = new ArcDraw();
 MoveColorArcDraw moveColorArcDraw = new MoveColorArcDraw();
-
+BasicShapeLib basicShape = new BasicShapeLib();
 
 void setup() {
-  size(512, 512);
-  background(0);
+  size(1024, 512);
+  background(155);
 }
 //*********************
 // INIT VARIABLES 
@@ -47,6 +47,9 @@ int beatDelay = 10; // TODO change the delay time so that it matches the beat of
 float[][] ends = {{0, 10}, {0, 10}};
 //center for moving arc drawing
 float[][] center = {{width/2, height/2}, {width/2, height/2}}; // leave open-ended for possibly having 2 different arc centers (one for each myo)
+
+//corner definition for rectangle
+int[][] corner = {  {0,0}, {15,0}};
 
 //****************************
 // SUPPORT FUNCTIONS
@@ -192,9 +195,8 @@ void draw() {
   //float[] drawArc(String[] accdims, String[] oredims, float[] ends, float[] center) {
 
   // call from first myo
-  ends[0] = moveColorArcDraw.drawArc(accdims[0], oredims[0], ends[0], center[0]);
-
-
+  //ends[0] = moveColorArcDraw.drawArc(accdims[0], oredims[0], ends[0], center[0]);
+  basicShape.Rectangles(accdims[0], oredims[0], corner);
 
   //handle running off the edge. I wish this were better. 
   // update: instead of bouncing back in dir from which the point came, code will loop (see mod "%")
