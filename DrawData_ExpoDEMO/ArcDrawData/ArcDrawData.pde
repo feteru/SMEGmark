@@ -7,17 +7,17 @@ MoveColorArcDraw moveColorArcDraw = new MoveColorArcDraw();
 RelativeTriangleDraw trianglesDraw = new RelativeTriangleDraw();
 
 void setup() {
-  size(512, 512); // arcs
- //size(1024, 1024); //triangles
+ size(512, 512); // arcs
+// size(1024, 1024); //triangles
   background(0);
 }
 //*********************
 // INIT VARIABLES 
 //********************
 
-boolean readFromExcel = false; // if read line-by-line from .txt, set = false
-String inputFileName = "../SensorRead/myo-sdk-win-0.9.0/samples/x64/Debug/outFile.txt"; // either excel or txt
-String logFileName = "../SensorRead/myo-sdk-win-0.9.0/samples/x64/Debug/logFile.csv"; // read not handled yet in this file
+boolean readFromExcel = true; // if read line-by-line from .txt, set = false
+String inputFileName = "../../SensorRead/myo-sdk-win-0.9.0/samples/x64/Debug/outFile.txt"; // either excel or txt
+String logFileName = "../../SensorRead/myo-sdk-win-0.9.0/samples/x64/Debug/logFile.csv"; // read not handled yet in this file
 
 // file obj to read from
 BufferedReader reader;
@@ -178,13 +178,12 @@ void draw() {
 
   //point(adaptedXpt, adaptedYpt); // make sure the point never overwrites the buffer with %width & %height (it essentially wraps around)
 
-
-  //linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
+ // linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
 
  
    // call from both myo 1 and myo 2 at once (handled by TrianglesDraw class)
    
-  // trianglesDraw.drawTriangles(accdims,oredims, ends[0], center); //triangles
+ //  trianglesDraw.drawTriangles(accdims,oredims, ends[0], center); //triangles
  ends[0] = moveColorArcDraw.drawArc(accdims[1], oredims[0], ends[0], center[0]); // arcs
 
 
@@ -207,7 +206,7 @@ void draw() {
 void keyPressed() {
   if (key == 's') {
     println("Saving...");
-    saveFrame("C:/Users/emmac/Documents/Bitcamp2018_Art/screen-####.jpg");
+    saveFrame("C:/Users/emmac/Documents/Bitcamp2018s_Art/screen-####.jpg");
     //saveFrame("//192.168.2.220/abarai/Servers/aodMARK/www/screen-####.jpg");
     println("Done saving.");
   }

@@ -129,11 +129,11 @@ void draw() {
   //point(adaptedXpt, adaptedYpt); // make sure the point never overwrites the buffer with %width & %height (it essentially wraps around)
   
   
-  //linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
+  linesSlantUp(1, width/8, 3, adaptedXpt, adaptedYpt);
   
   println(accdims);
  // ends = arcDraw.drawArc(accdims, oredims, ends);
- ends = colorArcDraw.drawArc(accdims, oredims, ends);
+// ends = colorArcDraw.drawArc(accdims, oredims, ends);
   
   
   

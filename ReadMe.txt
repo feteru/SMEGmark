@@ -1,6 +1,5 @@
 bigsickquick: sample myo data sets
-DrawColorExperiment: emma attempted processing alterations to Sam's DrawData script
-DrawData_0: Sam's processing code drawing using points from an input excel file
+DrawData: processing code versions to draw using points from an input excel file
 
 SensorRead: Gerry's c++ code writing myo sensor data to excel files (for processing code to then pick up)
 
@@ -9,3 +8,7 @@ SensorRead info: build PROJECT located in sample/hello-myo..., then run the exec
 logFile.csv has same format as outFile.txt but with all commas for csv.
 make sure myo is connected to computer
 // 1st 3 (oreintation): int | last 6: floats
+
+to run DrawData from csv, set readFromExcel = true, logFileName = "whateverYourFileIsCalled.csv"
+to run data in real-time, readFromExcel = false, inputFileName = "fileIsCalled.txt"
+for real-time data also launch hello-myo application executable (minimize black console that pops up and have it run in background)

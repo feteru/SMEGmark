@@ -7,17 +7,17 @@ MoveColorArcDraw moveColorArcDraw = new MoveColorArcDraw();
 RelativeTriangleDraw trianglesDraw = new RelativeTriangleDraw();
 
 void setup() {
-  size(512, 512); // arcs
- //size(1024, 1024); //triangles
+ // size(512, 512); // arcs
+ size(1024, 1024); //triangles
   background(0);
 }
 //*********************
 // INIT VARIABLES 
 //********************
 
-boolean readFromExcel = false; // if read line-by-line from .txt, set = false
-String inputFileName = "../SensorRead/myo-sdk-win-0.9.0/samples/x64/Debug/outFile.txt"; // either excel or txt
-String logFileName = "../SensorRead/myo-sdk-win-0.9.0/samples/x64/Debug/logFile.csv"; // read not handled yet in this file
+boolean readFromExcel = true; // if read line-by-line from .txt, set = false
+String inputFileName = "../../SensorRead/myo-sdk-win-0.9.0/samples/x64/Debug/outFile.txt"; // either excel or txt
+String logFileName = "../../SensorRead/myo-sdk-win-0.9.0/samples/x64/Debug/logFile.csv"; // read not handled yet in this file
 
 // file obj to read from
 BufferedReader reader;
@@ -184,8 +184,8 @@ void draw() {
  
    // call from both myo 1 and myo 2 at once (handled by TrianglesDraw class)
    
-  // trianglesDraw.drawTriangles(accdims,oredims, ends[0], center); //triangles
- ends[0] = moveColorArcDraw.drawArc(accdims[1], oredims[0], ends[0], center[0]); // arcs
+   trianglesDraw.drawTriangles(accdims,oredims, ends[0], center); //triangles
+ //ends[0] = moveColorArcDraw.drawArc(accdims[1], oredims[0], ends[0], center[0]); // arcs
 
 
   if (!readFromExcel) { // if not reading from excel, it's reading from a .txt so we open/close file in each loop
