@@ -7,7 +7,7 @@ MoveColorArcDraw moveColorArcDraw = new MoveColorArcDraw();
 BasicShapeLib basicShape = new BasicShapeLib();
 
 void setup() {
-  size(1024, 512);
+  size(1280,768);
   background(155);
 }
 //*********************

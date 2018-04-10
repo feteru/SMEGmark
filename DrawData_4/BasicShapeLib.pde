@@ -21,16 +21,23 @@ class BasicShapeLib{
   int[][] Rectangles(String[] accdims, String[] oredims, int[][] corner) {
     rectMode(CORNER);
     
-    fill((float(oredims[0])*200)%255, (float(oredims[1])*200)%255, (float(oredims[2])*200)%255);
+    fill((float(oredims[0])*700)%255, (float(oredims[1])*70)%255, (float(oredims[2])*200)%255);
     //float[] corner1 = (ends);  //pass corner1 value in.
     //corner[1][1] = abs(int(accdims[2])) + corner[1][1];  //height delta + previous height value
     //44println(corner[0]);
-    if(corner[1][1] > height){
-      corner[1][1] = height;
-      rect(corner[0][0], corner[0][1], corner[1][0], corner[1][1]);
-      corner[0][0] = corner[1][0]; corner[0][1] = 0;
-      corner[1][0] = corner[0][0];  //abs(int(accdims[0]))*5 + abs(int(oredims[1]))*3 + 
-      corner[1][1] = corner[0][1]; //abs(int(accdims[2]))*4;
+    if(corner[1][1] >= height){
+      println("she gone");
+
+      corner[0][0] = corner[1][0]; corner[0][1] = 0;  //shift over one.
+      corner[1][0] = corner[0][0] + abs(int(accdims[0]))*5 + abs(int(oredims[1]))*3;
+      corner[1][1] = corner[0][1] + abs(int(accdims[2]))*4;
+      //corner[1][1] = corner[1][1] - corner[0][1];
+      rect(corner[0][0]%width, corner[0][1]%width, corner[1][0]%width, corner[1][1]%width);  //do a rectangle
+
+      //corner[1][1] = height;
+
+      //corner[1][0] = corner[0][0];  //abs(int(accdims[0]))*5 + abs(int(oredims[1]))*3 + 
+       //abs(int(accdims[2]))*4;
       //rect(corner[0][0], corner[0][1], corner[1][0], corner[1][1]);
     }
     else if(corner[1][1] < height){
